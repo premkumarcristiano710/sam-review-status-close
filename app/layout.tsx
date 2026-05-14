@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Dashboard',
-  description: 'Close CRM Leads Dashboard',
+  title: 'Close CRM Lead Manager',
+  description: 'Manage and sync your leads from Close CRM',
 };
 
 export default function RootLayout({

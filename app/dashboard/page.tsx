@@ -192,8 +192,8 @@ export default function Dashboard() {
         <div className="max-w-7xl mx-auto px-6 py-12">
           <div className="flex justify-between items-start mb-8">
             <div>
-              <h1 className="text-4xl font-bold mb-2">Sam&apos;s Review Dashboard</h1>
-              <p className="text-indigo-100">Manage and track your leads from Close CRM</p>
+              <h1 className="text-4xl font-bold mb-2">Close CRM Lead Manager</h1>
+              <p className="text-indigo-100">Sync and manage your leads from Close CRM</p>
             </div>
             <div className="flex gap-3">
               <button

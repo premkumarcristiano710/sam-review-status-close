@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
-
 export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json();
@@ -14,14 +11,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
+    // Read env vars at request time, not at build time
+    const adminEmail = process.env.ADMIN_EMAIL;
+    const adminPassword = process.env.ADMIN_PASSWORD;
+
+    if (!adminEmail || !adminPassword) {
+      console.error('Admin credentials not configured:', {
+        hasEmail: !!adminEmail,
+        hasPassword: !!adminPassword,
+      });
       return NextResponse.json(
-        { error: 'Server configuration error' },
+        { error: 'Server configuration error - admin credentials not set' },
         { status: 500 }
       );
     }
 
-    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+    if (email === adminEmail && password === adminPassword) {
       const response = NextResponse.json(
         { success: true, message: 'Authentication successful' },
         { status: 200 }

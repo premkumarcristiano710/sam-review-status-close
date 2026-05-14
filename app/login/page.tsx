@@ -57,7 +57,7 @@ export default function LoginPage() {
             <p className="text-gray-600">
               {isLogin
                 ? 'Sign in to access your leads dashboard'
-                : 'Sign up to get started with Sam\'s Review'}
+                : 'Sign up to get started with Close CRM Lead Manager'}
             </p>
           </div>
 
@@ -123,7 +123,7 @@ export default function LoginPage() {
 
           <div className="mt-6 text-center">
             <p className="text-gray-600 text-sm">
-              {isLogin ? "Don&apos;t have an account? " : 'Already have an account? '}
+              {isLogin ? {"Don't have an account? "} : 'Already have an account? '}
               <button
                 onClick={() => {
                   setIsLogin(!isLogin);
@@ -159,7 +159,7 @@ export default function LoginPage() {
 
         <div className="text-center text-white z-10">
           <div className="text-6xl mb-6">⭐</div>
-          <h1 className="text-5xl font-bold mb-4">Sam&apos;s Review</h1>
+          <h1 className="text-5xl font-bold mb-4">Close CRM Lead Manager</h1>
           <p className="text-xl text-indigo-100">Manage your leads with ease</p>
         </div>
       </div>
