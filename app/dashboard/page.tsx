@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { supabase, type Lead } from '@/lib/supabase-client';
 
@@ -33,7 +33,7 @@ export default function Dashboard() {
   useEffect(() => {
     filterLeads();
     setCurrentPage(1);
-  }, [leads, searchTerm, statusFilter, dateFromFilter, dateToFilter]);
+  }, [filterLeads]);
 
   useEffect(() => {
     const paginated = filteredLeads.slice(startIdx, endIdx);
@@ -64,7 +64,7 @@ export default function Dashboard() {
     }
   }
 
-  function filterLeads() {
+  const filterLeads = useCallback(() => {
     let filtered = leads;
 
     if (searchTerm) {
@@ -99,7 +99,7 @@ export default function Dashboard() {
     }
 
     setFilteredLeads(filtered);
-  }
+  }, [leads, searchTerm, statusFilter, dateFromFilter, dateToFilter]);
 
   function handleRowsPerPageChange(value: number) {
     setRowsPerPage(value);
@@ -181,7 +181,7 @@ export default function Dashboard() {
         <div className="max-w-7xl mx-auto px-6 py-12">
           <div className="flex justify-between items-start mb-8">
             <div>
-              <h1 className="text-4xl font-bold mb-2">Sam's Review Dashboard</h1>
+              <h1 className="text-4xl font-bold mb-2">Sam&apos;s Review Dashboard</h1>
               <p className="text-indigo-100">Manage and track your leads from Close CRM</p>
             </div>
             <div className="flex gap-3">
