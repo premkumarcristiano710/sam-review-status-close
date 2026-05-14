@@ -2,9 +2,11 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { supabase, type Lead } from '@/lib/supabase-client';
 
 export default function Dashboard() {
+  const router = useRouter();
   const [leads, setLeads] = useState<Lead[]>([]);
   const [filteredLeads, setFilteredLeads] = useState<Lead[]>([]);
   const [displayedLeads, setDisplayedLeads] = useState<Lead[]>([]);
@@ -174,6 +176,15 @@ export default function Dashboard() {
     }
   }
 
+  async function handleLogout() {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      router.push('/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  }
+
   return (
     <div className="min-h-screen bg-white font-sans">
       {/* Gradient Header */}
@@ -185,12 +196,6 @@ export default function Dashboard() {
               <p className="text-indigo-100">Manage and track your leads from Close CRM</p>
             </div>
             <div className="flex gap-3">
-              <Link
-                href="/"
-                className="px-4 py-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-all duration-200 text-sm font-medium"
-              >
-                ← Home
-              </Link>
               <button
                 onClick={handleSync}
                 disabled={syncing}
@@ -198,6 +203,12 @@ export default function Dashboard() {
               >
                 <span className={syncing ? 'inline-block animate-spin' : ''}>{syncing ? '⏳' : '🔄'}</span>
                 {syncing ? 'Syncing...' : 'Sync Leads'}
+              </button>
+              <button
+                onClick={handleLogout}
+                className="px-6 py-2 rounded-full bg-red-100 text-red-700 hover:bg-red-200 transition-all duration-200 font-medium text-sm"
+              >
+                Logout
               </button>
             </div>
           </div>
