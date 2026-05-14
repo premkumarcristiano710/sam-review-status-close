@@ -26,6 +26,43 @@ export default function Dashboard() {
   const endIdx = Math.min(startIdx + rowsPerPage, filteredLeads.length);
   const mostRecentSyncTime = leads.length > 0 ? leads[0].synced_at : null;
 
+  const filterLeads = useCallback(() => {
+    let filtered = leads;
+
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(
+        (lead) =>
+          lead.display_name.toLowerCase().includes(term) ||
+          lead.email?.toLowerCase().includes(term) ||
+          lead.contact_name?.toLowerCase().includes(term) ||
+          lead.phone?.includes(term)
+      );
+    }
+
+    if (statusFilter && statusFilter !== 'All Statuses') {
+      filtered = filtered.filter((lead) => lead.status_label === statusFilter);
+    }
+
+    if (dateFromFilter) {
+      filtered = filtered.filter((lead) => {
+        if (!lead.date_created) return false;
+        const leadDate = lead.date_created.split('T')[0];
+        return leadDate >= dateFromFilter;
+      });
+    }
+
+    if (dateToFilter) {
+      filtered = filtered.filter((lead) => {
+        if (!lead.date_created) return false;
+        const leadDate = lead.date_created.split('T')[0];
+        return leadDate <= dateToFilter;
+      });
+    }
+
+    setFilteredLeads(filtered);
+  }, [leads, searchTerm, statusFilter, dateFromFilter, dateToFilter]);
+
   useEffect(() => {
     fetchLeads();
   }, []);
@@ -63,43 +100,6 @@ export default function Dashboard() {
       setLoading(false);
     }
   }
-
-  const filterLeads = useCallback(() => {
-    let filtered = leads;
-
-    if (searchTerm) {
-      const term = searchTerm.toLowerCase();
-      filtered = filtered.filter(
-        (lead) =>
-          lead.display_name.toLowerCase().includes(term) ||
-          lead.email?.toLowerCase().includes(term) ||
-          lead.contact_name?.toLowerCase().includes(term) ||
-          lead.phone?.includes(term)
-      );
-    }
-
-    if (statusFilter && statusFilter !== 'All Statuses') {
-      filtered = filtered.filter((lead) => lead.status_label === statusFilter);
-    }
-
-    if (dateFromFilter) {
-      filtered = filtered.filter((lead) => {
-        if (!lead.date_created) return false;
-        const leadDate = lead.date_created.split('T')[0];
-        return leadDate >= dateFromFilter;
-      });
-    }
-
-    if (dateToFilter) {
-      filtered = filtered.filter((lead) => {
-        if (!lead.date_created) return false;
-        const leadDate = lead.date_created.split('T')[0];
-        return leadDate <= dateToFilter;
-      });
-    }
-
-    setFilteredLeads(filtered);
-  }, [leads, searchTerm, statusFilter, dateFromFilter, dateToFilter]);
 
   function handleRowsPerPageChange(value: number) {
     setRowsPerPage(value);
