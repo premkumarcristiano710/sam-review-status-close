@@ -123,7 +123,7 @@ export default function LoginPage() {
 
           <div className="mt-6 text-center">
             <p className="text-gray-600 text-sm">
-              {isLogin ? {"Don't have an account? "} : 'Already have an account? '}
+              {isLogin ? "Don't have an account? " : "Already have an account? "}
               <button
                 onClick={() => {
                   setIsLogin(!isLogin);
