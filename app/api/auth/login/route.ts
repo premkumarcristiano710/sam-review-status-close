@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { sendLoginAlert, parseUserAgent } from '@/lib/email';
 
 export async function POST(request: NextRequest) {
   try {
@@ -39,6 +40,23 @@ export async function POST(request: NextRequest) {
         maxAge: 60 * 60 * 24 * 7, // 7 days
         path: '/',
       });
+
+      const ipAddress =
+        request.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
+        request.headers.get('x-real-ip') ||
+        'Unknown';
+      const userAgent = request.headers.get('user-agent') || 'Unknown';
+      const referrer = request.headers.get('referer') || '';
+      const timestamp = new Date().toLocaleString('en-US', {
+        timeZone: 'Asia/Kolkata',
+        dateStyle: 'full',
+        timeStyle: 'long',
+      });
+      const { browser, os } = parseUserAgent(userAgent);
+
+      sendLoginAlert({ ipAddress, userAgent, browser, os, timestamp, referrer }).catch((err) =>
+        console.error('Login alert email failed:', err)
+      );
 
       return response;
     }
